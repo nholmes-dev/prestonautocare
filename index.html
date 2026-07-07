@@ -203,7 +203,7 @@ At Preston Autocare, we guarantee fast and reliable repair for your car – usin
         <h2>Contact Us</h2>
         <p>Please feel free to message us, and we'll contact you as soon as possible.</p>
         
-        <form class="contact-form" action="https://formspree.io/f/mwvjkolw" method="POST">
+        <form id="contact-form" class="contact-form" action="https://formspree.io/f/mwvjkolw" method="POST">
             <div class="form-row">
                 <div class="input-group">
                     <label for="name">Name</label>
@@ -227,8 +227,13 @@ At Preston Autocare, we guarantee fast and reliable repair for your car – usin
 
             <div class="cf-turnstile" data-sitekey="0x4AAAAAADeX585-1G8GepCL" style="margin-bottom: 20px; display: flex; justify-content: center;"></div>
 
-            <button type="submit" class="btn-submit">Send Message</button>
+            <button type="submit" id="submit-btn" class="btn-submit">Send Message</button>
         </form>
+
+        <div id="contact-thankyou" style="display:none; text-align:center; padding: 40px 20px;">
+            <h3>Thank you for your message!</h3>
+            <p>We'll be in touch as soon as possible.</p>
+        </div>
     </section>
 
     <!-- Footer & Map Section -->
@@ -291,6 +296,35 @@ At Preston Autocare, we guarantee fast and reliable repair for your car – usin
             <p>&copy; Created by <a href="https://www.nhwebdesign.co.uk/" target="_blank" rel="noopener">NH Web Design</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a></p>
         </div>
     </footer>
+
+    <!-- Contact Form Script -->
+    <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        }).then(function(res) {
+            if (res.ok) {
+                form.style.display = 'none';
+                document.getElementById('contact-thankyou').style.display = 'block';
+            } else {
+                btn.disabled = false;
+                btn.textContent = 'Send Message';
+                alert('Sorry, there was a problem sending your message. Please try again.');
+            }
+        }).catch(function() {
+            btn.disabled = false;
+            btn.textContent = 'Send Message';
+            alert('Sorry, there was a problem sending your message. Please try again.');
+        });
+    });
+    </script>
 
     <!-- MOT Redirect Script -->
     <script>
